@@ -18,7 +18,7 @@ const Menu = () => {
                                 <button>{element.category}</button>
                         </div>
                     ))
-                }   
+                }  
             </div>
         </div>
       </section>
