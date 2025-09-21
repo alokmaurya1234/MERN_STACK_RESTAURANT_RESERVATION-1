@@ -10,7 +10,8 @@ dotenv.config();
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin:[ process.env.FRONTEND_URL,
+    "https://mern-stack-restaurant-reservation-1-fs6g-gp5w6hmka.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
