@@ -6,25 +6,40 @@ import reservationRouter from "./routes/reservationRoute.js";
 import { dbConnection } from "./database/dbConnection.js";
 
 const app = express();
-dotenv.config({ path: "./config.env" });
+dotenv.config();
 
+// ✅ Allowed origins from .env
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.LOCAL_URL,
+];
+
+// ✅ CORS setup
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL,
-      process.env.LOCAL_URL
-    ],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
+    credentials: true, // set true only if you use cookies/auth
   })
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1/reservation", reservationRouter);
-app.get("/", (req, res, next)=>{return res.status(200).json({
-  success: true,
-  message: "HELLO WORLD AGAIN"
-})})
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "HELLO WORLD AGAIN",
+  });
+});
 
 dbConnection();
 
